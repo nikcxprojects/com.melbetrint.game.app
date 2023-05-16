@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject menu;
     [SerializeField] GameObject levels;
     [SerializeField] GameObject game;
+    [SerializeField] GameObject pause;
     [SerializeField] GameObject win;
     [SerializeField] GameObject lose;
 
@@ -30,10 +31,10 @@ public class UIManager : MonoBehaviour
         levels.SetActive(true);
     }
 
-    public void StartGame()
+    public void OpenLevel(int levelID)
     {
         var _parent = GameObject.Find("Environment").transform;
-        var _prefab = Resources.Load<GameObject>("level");
+        var _prefab = Resources.Load<GameObject>($"levels/{levelID}");
 
         _gameRef = Instantiate(_prefab, _parent);
 
@@ -45,6 +46,11 @@ public class UIManager : MonoBehaviour
         game.SetActive(true);
     }
 
+    public void SetPause(bool IsPause)
+    {
+        pause.SetActive(IsPause);
+    }
+
     public void OpenMenu()
     {
         if (_gameRef)
@@ -53,6 +59,7 @@ public class UIManager : MonoBehaviour
         }
 
         game.SetActive(false);
+        pause.SetActive(false);
         win.SetActive(false);
         lose.SetActive(false);
         levels.SetActive(false);
