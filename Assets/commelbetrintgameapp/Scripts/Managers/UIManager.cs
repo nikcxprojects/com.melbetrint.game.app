@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Networking.UnityWebRequest;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class UIManager : MonoBehaviour
 
     [Space(10)]
     [SerializeField] GameObject menu;
+    [SerializeField] GameObject levels;
     [SerializeField] GameObject game;
-    [SerializeField] GameObject result;
+    [SerializeField] GameObject win;
+    [SerializeField] GameObject lose;
 
 
     private void Start()
@@ -28,10 +31,12 @@ public class UIManager : MonoBehaviour
 
         _gameRef = Instantiate(_prefab, _parent);
 
-        menu.SetActive(false);
+        levels.SetActive(false);
+
+        win.SetActive(false);
+        lose.SetActive(false);
 
         game.SetActive(true);
-        result.SetActive(false);
     }
 
     public void OpenMenu()
@@ -42,18 +47,29 @@ public class UIManager : MonoBehaviour
         }
 
         game.SetActive(false);
-        result.SetActive(false);
+        win.SetActive(false);
+        lose.SetActive(false);
+        levels.SetActive(false);
 
         menu.SetActive(true);
     }
 
-    public void GameOver()
+    public void GameOver(bool IsWin)
     {
         if (_gameRef)
         {
             Destroy(_gameRef);
         }
 
-        result.SetActive(true);
+        if(IsWin)
+        {
+            win.SetActive(true);
+        }
+        else
+        {
+            lose.SetActive(true);
+        }
+
+        game.SetActive(false);
     }
 }
