@@ -24,6 +24,12 @@ public class UIManager : MonoBehaviour
         OpenMenu();
     }
 
+    public void OpenLevels()
+    {
+        menu.SetActive(false);
+        levels.SetActive(true);
+    }
+
     public void StartGame()
     {
         var _parent = GameObject.Find("Environment").transform;
