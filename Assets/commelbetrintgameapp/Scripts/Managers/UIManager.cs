@@ -37,6 +37,9 @@ public class UIManager : MonoBehaviour
         var _prefab = Resources.Load<GameObject>($"levels/{levelID}");
 
         _gameRef = Instantiate(_prefab, _parent);
+        var ball = Instantiate(Resources.Load<GameObject>("ball"), _parent);
+
+        GameManager.Initalize(ball.transform, _gameRef.transform);
 
         levels.SetActive(false);
 
