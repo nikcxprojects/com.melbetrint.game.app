@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
         get => FindObjectOfType<UIManager>(); 
     }
 
+    private int currentLevel;
     private GameObject _gameRef;
 
     [Space(10)]
@@ -18,6 +19,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject pause;
     [SerializeField] GameObject win;
     [SerializeField] GameObject lose;
+
+    [Space(10)]
+    [SerializeField] GameObject nextBtn;
 
 
     private void Start()
@@ -33,13 +37,15 @@ public class UIManager : MonoBehaviour
 
     public void OpenLevel(int levelID)
     {
+        currentLevel = levelID;
+
         var _parent = GameObject.Find("Environment").transform;
         var _prefab = Resources.Load<GameObject>($"levels/{levelID}");
 
         _gameRef = Instantiate(_prefab, _parent);
-        var ball = Instantiate(Resources.Load<GameObject>("ball"), _parent);
+        var ball = Instantiate(Resources.Load<Ball>("ball"), _parent);
 
-        GameManager.Initalize(ball.transform, _gameRef.transform);
+        GameManager.Initalize(ball, _gameRef.GetComponent<Level>());
 
         levels.SetActive(false);
 
@@ -47,6 +53,17 @@ public class UIManager : MonoBehaviour
         lose.SetActive(false);
 
         game.SetActive(true);
+    }
+
+    public void TryAgain()
+    {
+        OpenLevel(currentLevel);
+    }
+
+    public void NextLevel()
+    {
+        currentLevel++;
+        OpenLevel(currentLevel);
     }
 
     public void SetPause(bool IsPause)
@@ -76,6 +93,8 @@ public class UIManager : MonoBehaviour
         {
             Destroy(_gameRef);
         }
+
+        nextBtn.SetActive(currentLevel < 8);
 
         if(IsWin)
         {

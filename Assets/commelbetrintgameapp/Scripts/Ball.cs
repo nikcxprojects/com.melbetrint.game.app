@@ -6,6 +6,8 @@ public class Ball : MonoBehaviour
 
     private Transform Pivot { get; set; }
 
+    public string direction;
+
     private void Awake()
     {
         Pivot = transform.GetChild(0);
@@ -24,32 +26,33 @@ public class Ball : MonoBehaviour
 
     private void RotatePivot()
     {
-        Pivot.Rotate(Vector3.back * 90);
+        var rv = Random.Range(1, 4);
+
+        Pivot.Rotate(90 * rv * Vector3.back);
+        switch(Mathf.RoundToInt(Pivot.eulerAngles.z))
+        {
+            case 310: direction = "r"; break;
+            case 220: direction = "d"; break;
+            case 130: direction = "l"; break;
+            case 40: direction = "u"; break;
+        }
     }
 
     private void Update()
     {
         if(Input.GetMouseButtonDown(0))
         {
-            GameManager.Move();
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(SettingsManager.VibraEnbled)
-        {
-            Handheld.Vibrate();
-        }
-
-        if (SettingsManager.SoundsEnabled)
-        {
-            if(Source.isPlaying)
+            if (SettingsManager.SoundsEnabled)
             {
-                Source.Stop();
+                if (Source.isPlaying)
+                {
+                    Source.Stop();
+                }
+
+                Source.Play();
             }
 
-            Source.Play();
+            GameManager.Move();
         }
     }
 }
